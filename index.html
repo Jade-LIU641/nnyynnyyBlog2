@@ -19,6 +19,21 @@
   <link href="/js/swiper/swiper@5.4.1.min.css" rel="stylesheet">
   
   
+    <script>
+        var themeModelId = '';
+        if (themeModelId) {
+            localStorage.setItem('modelId', themeModelId);
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/yuang01/live2d-widget@latest/autoload.js"></script>
+    <script>
+        var live2dOpen = eval('true') || false;
+        if (!live2dOpen) {
+            localStorage.setItem('waifu-display', 1609323474481);
+        }
+    </script>
+  
   
   
 <link rel="stylesheet" href="/css/animate.min.css">
@@ -69,7 +84,8 @@
         
     
 
-<meta name="generator" content="Hexo 6.0.0"></head>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="𝓷𝓷𝔂𝔂" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
   
   <!-- 依赖于jquery和vue -->
@@ -100,7 +116,7 @@
     <div class="configure-border-2">
       <div class="configure-core"></div>
     </div>
-    <div class="loading-word">loading...</div>
+    <div class="loading-word">加载中...</div>
   </div>
 </div>
 
@@ -232,7 +248,7 @@
                   
                     <i class="fas fa-home" aria-hidden="true"></i>
                   
-                  <span class="name">Home</span>
+                  <span class="name">首页</span>
                 </a>
               
             </li>
@@ -243,7 +259,7 @@
                   
                     <i class="fas fa-archive" aria-hidden="true"></i>
                   
-                  <span class="name">Archives</span>
+                  <span class="name">归档</span>
                 </a>
               
             </li>
@@ -254,7 +270,7 @@
                   
                     <i class="fas fa-tags" aria-hidden="true"></i>
                   
-                  <span class="name">Tags</span>
+                  <span class="name">标签</span>
                 </a>
               
             </li>
@@ -265,7 +281,7 @@
                   
                     <i class="fas fa-bookmark" aria-hidden="true"></i>
                   
-                  <span class="name">Categories</span>
+                  <span class="name">分类</span>
                 </a>
               
             </li>
@@ -276,7 +292,7 @@
                   
                     <i class="fas fa-user" aria-hidden="true"></i>
                   
-                  <span class="name">About</span>
+                  <span class="name">关于</span>
                 </a>
               
             </li>
@@ -287,7 +303,7 @@
                   
                     <i class="fas fa-link" aria-hidden="true"></i>
                   
-                  <span class="name">Friends</span>
+                  <span class="name">友情链接</span>
                 </a>
               
             </li>
@@ -359,66 +375,66 @@
           
             <li class="menu-item" style="position: relative;">
               
-                <a href="/" class="menu-item-link" title="Home">
+                <a href="/" class="menu-item-link" title="首页">
                   
                     <i class="fas fa-home" aria-hidden="true"></i>
                   
-                  <span class="name">Home</span>
+                  <span class="name">首页</span>
                 </a>
               
             </li>
           
             <li class="menu-item" style="position: relative;">
               
-                <a href="/archives" class="menu-item-link" title="Archives">
+                <a href="/archives" class="menu-item-link" title="归档">
                   
                     <i class="fas fa-archive" aria-hidden="true"></i>
                   
-                  <span class="name">Archives</span>
+                  <span class="name">归档</span>
                 </a>
               
             </li>
           
             <li class="menu-item" style="position: relative;">
               
-                <a href="/tags" class="menu-item-link" title="Tags">
+                <a href="/tags" class="menu-item-link" title="标签">
                   
                     <i class="fas fa-tags" aria-hidden="true"></i>
                   
-                  <span class="name">Tags</span>
+                  <span class="name">标签</span>
                 </a>
               
             </li>
           
             <li class="menu-item" style="position: relative;">
               
-                <a href="/categories" class="menu-item-link" title="Categories">
+                <a href="/categories" class="menu-item-link" title="分类">
                   
                     <i class="fas fa-bookmark" aria-hidden="true"></i>
                   
-                  <span class="name">Categories</span>
+                  <span class="name">分类</span>
                 </a>
               
             </li>
           
             <li class="menu-item" style="position: relative;">
               
-                <a href="/about" class="menu-item-link" title="About">
+                <a href="/about" class="menu-item-link" title="关于">
                   
                     <i class="fas fa-user" aria-hidden="true"></i>
                   
-                  <span class="name">About</span>
+                  <span class="name">关于</span>
                 </a>
               
             </li>
           
             <li class="menu-item" style="position: relative;">
               
-                <a href="/friends" class="menu-item-link" title="Friends">
+                <a href="/friends" class="menu-item-link" title="友情链接">
                   
                     <i class="fas fa-link" aria-hidden="true"></i>
                   
-                  <span class="name">Friends</span>
+                  <span class="name">友情链接</span>
                 </a>
               
             </li>
@@ -435,13 +451,13 @@
         <h2>
           <span>
             <i class="fas fa-search" aria-hidden="true"></i>
-            <span class="title">Search</span>
+            <span class="title">本地搜索</span>
           </span>
           <i class="fas fa-times close" pointer style="float:right;" aria-hidden="true" @click.self="cancelDialogVisible()"></i>
         </h2>
         <form class="site-search-form">
           <input type="text"
-            placeholder="Please enter keywords"
+            placeholder="请输入关键字"
             id="local-search-input" 
             @click="getSearchFile()"
             class="st-search-input"
@@ -1245,7 +1261,7 @@
               
                 <div class="index-notice-content__title">
                   
-                    <a target="_blank" rel="noopener" href="http://baidu.com" title="#新增 轮播图支持三种模式了，功能也增强了 ~" style="color:red">
+                    <a href="http://baidu.com" target="_blank" rel="noopener" title="#新增 轮播图支持三种模式了，功能也增强了 ~" style="color:red">
                       #新增 轮播图支持三种模式了，功能也增强了 ~
                     </a>
                   
@@ -1262,7 +1278,7 @@
               
                 <div class="index-notice-content__title">
                   
-                    <a target="_blank" rel="noopener" href="http://baidu.com" title="#新增 支持二级导航" style="color:blue">
+                    <a href="http://baidu.com" target="_blank" rel="noopener" title="#新增 支持二级导航" style="color:blue">
                       #新增 支持二级导航
                     </a>
                   
@@ -1279,7 +1295,7 @@
               
                 <div class="index-notice-content__title">
                   
-                    <a target="_blank" rel="noopener" href="http://baidu.com" title="#新增 归档，分类等页面头部图片位置可以设置为视频 ~" style="color:#42b983">
+                    <a href="http://baidu.com" target="_blank" rel="noopener" title="#新增 归档，分类等页面头部图片位置可以设置为视频 ~" style="color:#42b983">
                       #新增 归档，分类等页面头部图片位置可以设置为视频 ~
                     </a>
                   
@@ -1296,7 +1312,7 @@
               
                 <div class="index-notice-content__title">
                   
-                    <a target="_blank" rel="noopener" href="http://baidu.com" title="#新增 头部导航可以设置为在顶部透明，并且可以任意设置背景颜色了 ~" style="">
+                    <a href="http://baidu.com" target="_blank" rel="noopener" title="#新增 头部导航可以设置为在顶部透明，并且可以任意设置背景颜色了 ~" style="">
                       #新增 头部导航可以设置为在顶部透明，并且可以任意设置背景颜色了 ~
                     </a>
                   
@@ -1313,7 +1329,7 @@
               
                 <div class="index-notice-content__title">
                   
-                    <a target="_blank" rel="noopener" href="http://baidu.com" title="#新增 首页增加了座右铭和公告栏目 ~" style="">
+                    <a href="http://baidu.com" target="_blank" rel="noopener" title="#新增 首页增加了座右铭和公告栏目 ~" style="">
                       #新增 首页增加了座右铭和公告栏目 ~
                     </a>
                   
@@ -1370,7 +1386,7 @@
 
 
 <div class="topArticle reveal">
-	<h3><i class="fas fa-thumbs-o-up" aria-hidden="true"></i>Recommend Articles</h3>
+	<h3><i class="fas fa-thumbs-o-up" aria-hidden="true"></i>推荐文章</h3>
 	<div class="articles">
 		
 			
@@ -1628,7 +1644,7 @@
     
   <section class="widget side_archives">
     
-    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/01/"><span class="card-archive-list-date">January 2022</span><span class="card-archive-list-count">2</span></a></li></ul></div>
+    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/01/"><span class="card-archive-list-date">一月 2022</span><span class="card-archive-list-count">2</span></a></li></ul></div>
   </section>
 
     <section class="widget side_webinfo">
@@ -1688,8 +1704,8 @@
         <div class="webinfo-item">
           <div>最后活动时间：</div>
           
-            <div id="last-update" style="display: none;">Wed Jan 19 2022 14:19:36 GMT+0800 (中国标准时间)</div>
-            <div id="last-update-show">2022-01-19 日</div>
+            <div id="last-update" style="display: none;">Fri Jan 21 2022 22:30:02 GMT+0800 (中国标准时间)</div>
+            <div id="last-update-show">2022-01-21 日</div>
           
         </div>
         
@@ -1739,7 +1755,7 @@
           try {
             document.getElementById('last-update-show').innerHTML = timeago(new Date(lastUpDate));
           } catch (error) {
-            document.getElementById('last-update-show').innerHTML = '2022-01-19 日';
+            document.getElementById('last-update-show').innerHTML = '2022-01-21 日';
           }
         </script>
         
@@ -1756,7 +1772,13 @@
 <!-- 雪花和花瓣特效 -->
 
   
-    <script src="/js/falling/sakura.js"></script>
+    <script type="text/javascript">
+      //只在桌面版网页启用特效
+      var windowWidth = $(window).width();
+      if (windowWidth > 768) {
+        loadScript('/js/falling/sakura.js');
+      }
+    </script>
   
 
 
@@ -1781,7 +1803,7 @@
       
         
           <div class="footer-copyright">
-            <p>Copyright © 2019 - 2020 <a target="_blank" rel="noopener" href="https://github.com/yuang01">yuang01</a> | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/yuang01/theme">Bamboo</a> </p>
+            <p>Copyright © 2020 - 2022 <a href="https://gitee.com/there_are_fish_every_year/there_are_fish_every_year" target="_blank" rel="noopener">nnyy</a> | Powered by <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo</a> | Theme <a href="https://github.com/yuang01/theme" target="_blank" rel="noopener">Bamboo</a> </p>
 
           </div>
         
@@ -1791,11 +1813,11 @@
             <!-- 不蒜子统计 -->
             <!-- 不蒜子统计 -->
 <span id="busuanzi_container_site_pv">
-      <i class="fas fa-eye" aria-hidden="true"></i>Total visits：<span id="busuanzi_value_site_pv"></span> times
+      <i class="fas fa-eye" aria-hidden="true"></i>本站总访问量：<span id="busuanzi_value_site_pv"></span> 次
 </span>
 <span class="post-meta-divider">|</span>
 <span id="busuanzi_container_site_uv" style='display:none'>
-      <i class="fas fa-users" aria-hidden="true"></i>Number of visitors：<span id="busuanzi_value_site_uv"></span> people
+      <i class="fas fa-users" aria-hidden="true"></i>本站访客数：<span id="busuanzi_value_site_uv"></span> 人
 </span>
 
           
@@ -1803,6 +1825,9 @@
       
         
           <div class="footer-custom">
+            
+              <div><p>小破站已成功启动520天❤欢迎光临</p>
+</div>
             
           </div>
         
@@ -1898,9 +1923,9 @@
 </style>
 <meting-js  
   class=""
-  server="tencent"
+  server="netease"
   type="playlist"
-  id="8062553743"
+  id="6967840500"
   fixed='true'
   autoplay='false'
   theme='#42b983'
@@ -2182,7 +2207,7 @@
       },
       mounted() {
         const that = this;
-        var copy = 'copy';
+        var copy = '复制';
         /* code */
         var initCopyCode = function () {
           var copyHtml = '';
@@ -2272,11 +2297,11 @@
         path: window.location.pathname,
         notify: false,
         verify: false,
-        app_id: "",
-        app_key: "",
+        app_id: "VrllPXWQKFBqeFUf9oRaIiPr-gzGzoHsz",
+        app_key: "Qg8zg0wz5xjDCPJgTyOb3am4",
         placeholder: "客官，说点什么吧",
         avatar: "",
-        master: "",   //博主邮箱md5
+        master: "505d0eb22bb3fd5e0392309910214b0a",   //博主邮箱md5
         tagMeta: ["博主","小伙伴","访客"],     //标识字段名
         friends: "",
         metaPlaceholder: { "nick": "昵称/QQ号", "mail": "邮箱" },
