@@ -3380,8 +3380,8 @@ pre:hover::-webkit-scrollbar-thumb:hover,
   margin-right: 5%;
 }
 #about .basic-info .books .book-item .logo {
-  width: 100px;
-  height: 110px;
+  width: 300px;
+  height: 200px;
   overflow: hidden;
 }
 #about .basic-info .books .book-item .logo img {
