@@ -3680,8 +3680,34 @@ pre:hover::-webkit-scrollbar-thumb:hover,
   padding: 1em;
   margin: 10px 0;
 }
-.darkModel #gitment-container {
+#waline-box {
+  padding: 1em;
+  margin: 15px auto;
+  background: rgba(255,255,255,0.8);
+  --waline-theme-color: #f8d0de !important;
+}
+#waline-box .v[data-class=v] .vbtn.primary {
+  border-color: #f8d0de;
+  background: #f8d0de;
+  color: #fff;
+}
+#waline-box .v[data-class=v] .vbtn.primary:hover,
+#waline-box .v[data-class=v] .vbtn.primary:active {
+  color: #fff !important;
+}
+.darkModel #gitment-container,
+.darkModel #waline-box {
   background-color: #2d3032;
+}
+.darkModel #waline-comment .v[data-class=v] .vpanel,
+.darkModel .v[data-class=v] .veditor:focus,
+.darkModel .v[data-class=v] .vinput:focus {
+  background-color: #2d3032;
+}
+.darkModel #waline-comment .v[data-class=v] .vheader label,
+.darkModel #waline-comment .v[data-class=v] .vaction,
+.darkModel #waline-comment .vcount {
+  color: #fff;
 }
 .search {
   color: #fff;
@@ -4664,7 +4690,7 @@ pre:hover::-webkit-scrollbar-thumb:hover,
 .darkModel .no-swiper,
 .darkModel .no-img-top,
 .darkModel .header .header-content .navbar .menu .menu-item .sub-menu li {
-  background: #f8d0de !important;
+  background: #222;
 }
 .darkModel .github-corner svg {
   fill: #f0f6fc !important;
