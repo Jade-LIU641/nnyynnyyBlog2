@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>es学习 | 𝓷𝓷𝔂𝔂</title>
+  <title>ElasticSearch（ ES）❤ | 𝓷𝓷𝔂𝔂</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -487,14 +487,14 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('/medias/14.jpg')">
+  background-position: center center;position: relative;background-image:url('https://img0.baidu.com/it/u=3302599712,333245399&fm=253&fmt=auto&app=138&f=JPEG?w=550&h=300')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        es学习
+        ElasticSearch（ ES）❤
       </span>
     </div>
     
@@ -509,7 +509,11 @@
         <span class="post-detail-header_categories">
           <i class="iconfont iconbookmark1"></i> 分类：
           
-            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-detail-header_category">
+            <a href="/categories/1-%E6%8A%80%E6%9C%AF/" class="post-detail-header_category">
+              1---技术
+            </a>
+          
+            <a href="/categories/1-%E6%8A%80%E6%9C%AF/%E5%90%8E%E7%AB%AF/" class="post-detail-header_category">
               后端
             </a>
           
@@ -534,19 +538,345 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h1 id="es学习"><a href="#es学习" class="headerlink" title="es学习"></a>es学习</h1><p><img src="/img/springcloud.png"></p>
+        <h2 id="ES❤"><a href="#ES❤" class="headerlink" title="ES❤"></a>ES❤</h2><h3 id="全文检索基础："><a href="#全文检索基础：" class="headerlink" title="全文检索基础："></a>全文检索基础：</h3><p>概念：将非结构化数据中的一部分信息提取出来，重新组织，使其变得有一定结构，然后对此有一定结构的数据进行搜索，从而达到搜索相对较快的目的。</p>
+<p>这部分从非结构化数据中提取出的然后重新组织的信息，我们称之索引。</p>
+<p>例如：新华字典。</p>
+<p><img src="/img/es1.png"></p>
+<p>按<code>部首</code>和按<code>拼音</code>就是字典的索引，对每一个字的解释是非结构化的，如果字典没有拼音表和部首检字表，在茫茫辞海中找一个字只能顺序扫描。</p>
+<p>然而字的某些信息可以提取出来进行结构化处理，比如读音，就比较结构化，分<code>声母</code>和<code>韵母</code>，分别只有几种可以一一列举，于是将读音拿出来按一定的顺序排列，每一项读音都指向此字的详细解释的页数。我们搜索时按结构化的拼音搜到读音，然后按其指向的页数，便可找到我们的非结构化数据——也即对字的解释。<br>这种先建立索引，再对索引进行搜索的过程就叫全文检索(Full-text Search)。<br>虽然创建索引的过程也是非常耗时的，但是索引一旦创建就可以多次使用，全文检索主要处理的是查询，所以耗时间创建索引是值得的。</p>
+<h3 id="全文检索流程"><a href="#全文检索流程" class="headerlink" title="全文检索流程:"></a>全文检索流程:</h3><p><img src="/img/es2.png"></p>
+<p>1.索引库<br>索引库就是存储索引的保存在磁盘上的一系列的文件。里面存储了建立好的索引信息以及文档对象。</p>
+<p>即:<code>索引库可以理解为数据库的一张专门存放部首、拼音的表</code></p>
+<p>2.document对象<br>获取原始内容的目的是为了索引，在索引前需要将原始内容创建成文档（Document），文档中包括一个一个的域（Field），域中存储内容。每个文档都有一个唯一的编号，就是文档id。</p>
+<p>即：<code>document对象相当于表中的一条记录。</code></p>
+<p>3.field对象</p>
+<p><code>field相当于是记录中的字段</code>。</p>
+<p>field是索引库中存储数据的<code>最小单位</code>。field的数据类型大致可以分为<code>数值类型</code>和<code>文本类型</code>，一般需要查询的字段都是<code>文本类型</code>的，field还有如下属性：</p>
+<pre class=" language-html"><code class="language-html">是否分词：是否对域的内容进行分词处理。前提是我们要对域的内容进行查询。
+是否索引：将Field分析后的词或整个Field值进行索引，只有索引方可搜索到。
+是否存储：将Field值存储在文档中，存储在文档中的Field才可以从Document中获取，凡是将来要从Document中获取的Field都要存储。
+✨例如 关爱流浪动物，领养代替购买
+分词：关爱 流浪 动物 流浪动物 关爱流浪动物...
+索引：上面的分词均可作为索引
+</code></pre>
+<p>4.term对象</p>
+<p>从文档对象中拆分出来的每个单词叫做一个Term，不同的域中拆分出来的相同的单词是不同的term。term中包含两部分一部分是文档的域名，另一部分是单词的内容。term是创建索引的关键词对象。</p>
+<p>✨栗子：</p>
+<p>t_dictionary就是索引库（表）</p>
+<p>document对象就是2条记录</p>
+<p>field对象就是拼音、部首、笔画这三个字段</p>
+<p>term对象就是每个单元格的数据叫做一个term。如下拼音是一个term、部首是一个term、笔画是一个term，a是一个term，亻是一个term…</p>
+<p><img src="/img/es3.png"></p>
+<h2 id="ES概念："><a href="#ES概念：" class="headerlink" title="ES概念："></a>ES概念：</h2><p>Elaticsearch，简称为es， es是一个开源的高扩展的分布式全文检索引擎，它可以近乎实时的存储、检索数据。</p>
+<p>Elasticsearch对应关系关系型数据库如下：</p>
+<table>
+<thead>
+<tr>
+<th>工具名称</th>
+<th>数据库</th>
+<th>表</th>
+<th>行数记录</th>
+<th>列数字段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mysql</td>
+<td>Databases</td>
+<td>Tables</td>
+<td>Rows</td>
+<td>Columns</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>工具名称</th>
+<th>索引</th>
+<th>类型</th>
+<th>文档</th>
+<th>字段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Elasticsearch</td>
+<td>Indices</td>
+<td>Types</td>
+<td>Documents</td>
+<td>Fields</td>
+</tr>
+</tbody></table>
+<h3 id="索引-index"><a href="#索引-index" class="headerlink" title="索引 index"></a>索引 index</h3><p>类比数据库。一个索引由一个名字（数据库名）来标识（必须全部是小写字母的），并且当我们要对对应于这个索引中的文档进行索引、搜索、更新和删除的时候，都要使用到这个名字。在一个集群中，可以定义任意多的索引。</p>
+<h3 id="类型-type"><a href="#类型-type" class="headerlink" title="类型 type"></a>类型 type</h3><p>类比数据库的表。在一个索引中，你可以定义一种或多种类型。（在一个库里可以有多张表），比如一个博客索引，有目录，评论，文章等类型。</p>
+<h3 id="文档-document"><a href="#文档-document" class="headerlink" title="文档 document"></a>文档 document</h3><p>类比数据表的数据记录，一个文档是一个可被索引的基础信息单元。比如。用户类型里的用户文档（用户表中的用户信息记录）</p>
+<h3 id="字段Field"><a href="#字段Field" class="headerlink" title="字段Field"></a>字段Field</h3><p>类比数据表的字段，对文档数据根据不同属性进行的分类标识。</p>
+<h3 id="映射-mapping"><a href="#映射-mapping" class="headerlink" title="映射 mapping"></a>映射 mapping</h3><p>mapping是处理数据的方式和规则方面做一些限制，如某个字段的数据类型、默认值、分析器、是否被索引等等，这些都是映射里面可以设置的，其它就是处理es里面数据的一些使用规则设置也叫做映射，按着最优规则处理数据对性能提高很大，因此才需要建立映射，并且需要思考如何建立映射才能对性能更好。</p>
+<h3 id="接近实时-NRT"><a href="#接近实时-NRT" class="headerlink" title="接近实时 NRT"></a>接近实时 NRT</h3><p>Elasticsearch是一个接近实时的搜索平台。这意味着，从索引一个文档直到这个文档能够被搜索到有一个轻微的延迟（通常是1秒以内）。</p>
+<h3 id="集群-cluster"><a href="#集群-cluster" class="headerlink" title="集群 cluster"></a>集群 cluster</h3><p>一个集群就是由一个或多个节点组织在一起，它们共同持有整个的数据，并一起提供索引和搜索功能。一个集群由一个唯一的名字标识，这个名字默认就是“elasticsearch”。这个名字是重要的，因为一个节点只能通过指定某个集群的名字，来加入这个集群。</p>
+<h3 id="节点-node"><a href="#节点-node" class="headerlink" title="节点 node"></a>节点 node</h3><p>一个节点是集群中的一个服务器，作为集群的一部分，它存储数据，参与集群的索引和搜索功能。和集群类似，一个节点也是由一个名字来标识的，默认情况下，这个名字是一个随机的漫威漫画角色的名字，这个名字会在启动的时候赋予节点。这个名字对于管理工作来说挺重要的，因为在这个管理过程中，你会去确定网络中的哪些服务器对应于Elasticsearch集群中的哪些节点。在一个集群里，只要你想，可以拥有任意多个节点。而且，如果当前你的网络中没有运行任何Elasticsearch节点，这时启动一个节点，会默认创建并加入一个叫做“elasticsearch”的集群。</p>
+<h3 id="分片和复制-shards-amp-replicas"><a href="#分片和复制-shards-amp-replicas" class="headerlink" title="分片和复制 shards&amp;replicas"></a>分片和复制 shards&amp;replicas</h3><p>一个索引可以存储超出单个结点硬件限制的大量数据。比如，一个具有10亿文档的索引占据1TB的磁盘空间，而任一节点都没有这样大的磁盘空间；或者单个节点处理搜索请求，响应太慢。</p>
+<p>为了解决这个问题，Elasticsearch提供了<code>将索引划分成多份的能力</code>，这些份就叫做<code>分片</code>。</p>
+<p>当你创建一个索引的时候，你可以指定你想要的分片的数量。每个分片本身也是一个功能完善并且独立的“索引”，这个“索引”可以被放置到集群中的任何节点上。分片很重要，主要有两方面的原因： </p>
+<p>1）允许你水平分割/扩展你的内容容量。</p>
+<p> 2）允许你在分片（潜在地，位于多个节点上）之上进行分布式的、并行的操作，进而提高性能/吞吐量。</p>
+<p>在一个网络/云的环境里，失败随时都可能发生，在某个分片/节点不知怎么的就处于离线状态，或者由于任何原因消失了，这种情况下，有一个故障转移机制是非常有用并且是强烈推荐的。为此目的Elasticsearch允许你<code>创建分片的一份或多份拷贝，这些拷贝叫做复制分片，或者直接叫复制</code>。</p>
+<p>复制之所以重要，有两个主要原因：</p>
+<p> 在分片/节点失败的情况下，提供了高可用性。因为这个原因，注意到复制分片从不与原/主要（original/primary）分片置于同一节点上是非常重要的。扩展你的搜索量/吞吐量，因为搜索可以在所有的复制上并行运行。</p>
+<p>总之，每个索引可以被分成多个分片。一个索引也可以被复制0次（意思是没有复制）或多次。一旦复制了，每个索引就有了主分片（作为复制源的原来的分片）和复制分片（主分片的拷贝）之别。分片和复制的数量可以在索引创建的时候指定。在索引创建之后，你可以在任何时候动态地改变复制的数量，但是你事后不能改变分片的数量。</p>
+<p>默认情况下，Elasticsearch中的每个索引被分片5个主分片和1个复制，这意味着，如果你的集群中至少有两个节点，你的索引将会有5个主分片和另外5个复制分片（1个完全拷贝），这样的话每个索引总共就有10个分片。</p>
+<h2 id="Elasticsearch-安装"><a href="#Elasticsearch-安装" class="headerlink" title="Elasticsearch 安装"></a>Elasticsearch 安装</h2><p>不久前学完docker，所以用Docker安装</p>
+<ol>
+<li><p>搜索elasticsearch镜像</p>
+<p>输入命令：<code>docker search elasticsearch</code></p>
+</li>
+<li><p>拉取elasticsearch镜像</p>
+<p>输入命令：<code>docker pull elasticsearch:5.6.8</code></p>
+</li>
+<li><p>查看本地镜像是否已安装了 elasticsearch:5.6.8</p>
+<p>输入命令：<code>docker images</code></p>
+</li>
+<li><p>运行es容器</p>
+<p>输入命令：<code>docker run -di --name=kkb_es -p 9200:9200 -p 9300:9300 elasticsearch:5.6.8</code></p>
+<p>9200端口(Web管理平台端口) 9300(服务默认端口)<br>浏览器输入地址访问： <a href="http://localhost:9200/" target="_blank" rel="noopener">http://localhost:9200/</a></p>
+<p><img src="/img/es4.png"></p>
+</li>
+<li><p>开启远程连接</p>
+<p>上面完成安装后，es并不能正常使用，elasticsearch从5版本以后默认不开启远程连接，程序直接连接会报如下错误：</p>
+<pre class=" language-java"><code class="language-java">ailed to load elasticsearch nodes <span class="token operator">:</span>
+org<span class="token punctuation">.</span>elasticsearch<span class="token punctuation">.</span>client<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>NoNodeAvailableException<span class="token operator">:</span> None of the configured nodes are
+available<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>#transport#<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">{</span>5ttLpMhkRjKLkvoY7ltUWg<span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">211.132</span><span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">211.132</span><span class="token operator">:</span><span class="token number">9300</span><span class="token punctuation">}</span><span class="token punctuation">]</span>
+</code></pre>
+<p>我们需要修改es配置开启远程连接，代码如下：</p>
+<p><strong>登录容器</strong></p>
+<p>输入命令：<code>docker exec -it kkb_es /bin/bash</code></p>
+<p><strong>查看目录结构 输入: dir</strong></p>
+<pre class=" language-java"><code class="language-java">root<span class="token annotation punctuation">@07f22eb41bb5</span><span class="token operator">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>share<span class="token operator">/</span>elasticsearch# dir
+NOTICE<span class="token punctuation">.</span>txt README<span class="token punctuation">.</span>textile bin config data lib logs modules plugins
+</code></pre>
+<p><strong>进入config目录</strong></p>
+<p>输入命令：<code>cd config</code></p>
+<p><strong>查看文件</strong></p>
+<pre class=" language-java"><code class="language-java">root<span class="token annotation punctuation">@07f22eb41bb5</span><span class="token operator">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>share<span class="token operator">/</span>elasticsearch<span class="token operator">/</span>config# ls
+elasticsearch<span class="token punctuation">.</span>yml log4j2<span class="token punctuation">.</span>properties scripts
+</code></pre>
+<p><strong>修改elasticsearch.yml文件</strong></p>
+<p>vi命令无法识别，因为docker容器里面没有该命令，我们可以安装该编辑器。</p>
+<p><strong>设置apt下载源</strong></p>
+<p>输入命令：<code>docker cp ~/sources.list kkb_es:/etc/apt/sources.list</code></p>
+<p><img src="/img/es5.png"></p>
+<p><strong>安装vim编辑器</strong></p>
+<p>输入命令：<code>apt-get update</code></p>
+<p>输入命令：<code>apt-get install vim</code></p>
+<p><strong>安装好了后，修改elasticsearch.yml配置，如下图：</strong></p>
+<p>输入命令：<code>vi elasticsearch.yml</code></p>
+<pre class=" language-java"><code class="language-java">cluster<span class="token punctuation">.</span>name<span class="token operator">:</span> my<span class="token operator">-</span>elasticsearch #添加集群
+http<span class="token punctuation">.</span>cors<span class="token punctuation">.</span>enabled<span class="token operator">:</span> <span class="token boolean">true</span>        #跨域配置 ，默认是<span class="token boolean">false</span>  
+http<span class="token punctuation">.</span>cors<span class="token punctuation">.</span>allow<span class="token operator">-</span>origin<span class="token operator">:</span> <span class="token string">"*"</span>    #表示跨域访问允许的域名地址（<span class="token operator">*</span>表示任意）
+network<span class="token punctuation">.</span>host<span class="token operator">:</span> <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">123.223</span>  #宿主机ip 
+</code></pre>
+<p><img src="/img/es6.png"></p>
+<p><strong>系统参数配置</strong></p>
+<p>修改vi /etc/security/limits.conf ，追加内容 (nofile是单个进程允许打开的最大文件个数 soft nofile 是软限制 hardnofile是硬限制 )</p>
+<pre class=" language-java"><code class="language-java"><span class="token operator">*</span> soft nofile <span class="token number">65536</span>
+<span class="token operator">*</span> hard nofile <span class="token number">65536</span>
+</code></pre>
+<p><img src="/img/es7.png"></p>
+<p>修改vi /etc/sysctl.conf，追加内容 (限制一个进程可以拥有的VMA(虚拟内存区域)的数量 )</p>
+<pre class=" language-java"><code class="language-java">vm<span class="token punctuation">.</span>max_map_count<span class="token operator">=</span><span class="token number">655360</span>
+</code></pre>
+</li>
+</ol>
+<p><img src="/img/es8.png"></p>
+<p>​    重新启动虚拟机，再次启动容器，发现已经可以启动并远程访问.</p>
+<h2 id="ElasticSearch的客户端操作"><a href="#ElasticSearch的客户端操作" class="headerlink" title="ElasticSearch的客户端操作"></a>ElasticSearch的客户端操作</h2><p>实际开发中，主要有三种方式可以作为elasticsearch服务的客户端：</p>
+<ul>
+<li>第一种，elasticsearch-head插件</li>
+<li>第二种，使用elasticsearch提供的Restful接口直接访问</li>
+<li>第三种，使用elasticsearch提供的API进行访问</li>
+</ul>
+<h3 id="elasticsearch-head"><a href="#elasticsearch-head" class="headerlink" title="elasticsearch-head"></a>elasticsearch-head</h3><p>ElasticSearchm没有自带图形化界面，我们可以通过安装ElasticSearch的head插件，完成图形化界面的效果，完成索引数据的查看。安装插件的方式有两种，在线安装和本地安装。本文档采用本地安装方式进行head插件的安装。elasticsearch-5-*以上版本安装head需要安装node和grunt。</p>
+<p>1）下载head插件：<a href="https://github.com/mobz/elasticsearch-head" target="_blank" rel="noopener">https://github.com/mobz/elasticsearch-head</a></p>
+<p>2）将elasticsearch-head-master压缩包解压到任意目录，但是要和elasticsearch的安装目录区别开</p>
+<p>我放在D:\java\elasticsearch-head-master</p>
+<p>3）下载nodejs：<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">https://nodejs.org/en/download/</a></p>
+<p>4）将grunt安装为全局命令 ，Grunt是基于Node.js的项目构建工具</p>
+<p>在cmd控制台中输入命令：<code>cnpm install -g grunt-cli</code></p>
+<p><img src="/img/es9.png"></p>
+<p>5）进入elasticsearch-head-master目录启动head，在命令提示符下输入命令：</p>
+<p><code>cnpm install</code>               <code>grunt server</code></p>
+<p>6）打开浏览器，输入 <a href="http://localhost:9100。">http://localhost:9100。</a></p>
+<p><img src="/img/es10.png"></p>
+<h3 id="使用Postman工具进行Restful接口访问"><a href="#使用Postman工具进行Restful接口访问" class="headerlink" title="使用Postman工具进行Restful接口访问"></a>使用Postman工具进行Restful接口访问</h3><h4 id="ElasticSearch的接口语法"><a href="#ElasticSearch的接口语法" class="headerlink" title="ElasticSearch的接口语法"></a>ElasticSearch的接口语法</h4><pre class=" language-java"><code class="language-java">curl <span class="token operator">-</span>X<span class="token operator">&lt;</span>VERB<span class="token operator">></span> <span class="token string">'&lt;PROTOCOL>://&lt;HOST>:&lt;PORT>/&lt;PATH>?&lt;QUERY_STRING>'</span> <span class="token operator">-</span>d <span class="token string">'&lt;BODY>'</span>
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VERB</td>
+<td>适当的 HTTP 方法 或 谓词 : GET 、 POST 、 PUT 、 HEAD 或者 DELETE 。</td>
+</tr>
+<tr>
+<td>PROTOCOL</td>
+<td>http 或者 https （如果你在 Elasticsearch 前面有一个 https 代理）</td>
+</tr>
+<tr>
+<td>HOST</td>
+<td>Elasticsearch 集群中任意节点的主机名，或者用 localhost 代表本地机器上的节点</td>
+</tr>
+<tr>
+<td>PORT</td>
+<td>运行 Elasticsearch HTTP 服务的端口号，默认是 9200 。</td>
+</tr>
+<tr>
+<td>PATH</td>
+<td>API 的终端路径（例如 _count 将返回集群中文档数量）。Path 可能包含多个组件，例如： _cluster/stats 和 _nodes/stats/jvm 。</td>
+</tr>
+<tr>
+<td>QUERY_STRING</td>
+<td>任意可选的查询字符串参数 (例如 ?pretty 将格式化地输出 JSON 返回值，使其更容易阅读)</td>
+</tr>
+<tr>
+<td>BODY</td>
+<td>一个 JSON 格式的请求体 (如果请求需要的话)</td>
+</tr>
+</tbody></table>
+<h4 id="创建索引index和映射mapping"><a href="#创建索引index和映射mapping" class="headerlink" title="创建索引index和映射mapping"></a>创建索引index和映射mapping</h4><p>请求url：<code>PUT 192.168.123.210:9200/blog1</code></p>
+<p>请求体：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
+    <span class="token string">"mappings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"article"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">"id"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"long"</span><span class="token punctuation">,</span>
+                <span class="token string">"store"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+                <span class="token string">"index"</span><span class="token operator">:</span><span class="token string">"not_analyzed"</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                <span class="token string">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                    <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"text"</span><span class="token punctuation">,</span>
+                    <span class="token string">"store"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+                    <span class="token string">"index"</span><span class="token operator">:</span><span class="token string">"analyzed"</span><span class="token punctuation">,</span>
+                    <span class="token string">"analyzer"</span><span class="token operator">:</span><span class="token string">"standard"</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                <span class="token string">"content"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                    <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"text"</span><span class="token punctuation">,</span>
+                    <span class="token string">"store"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+                    <span class="token string">"index"</span><span class="token operator">:</span><span class="token string">"analyzed"</span><span class="token punctuation">,</span>
+                    <span class="token string">"analyzer"</span><span class="token operator">:</span><span class="token string">"standard"</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>    
+<span class="token punctuation">}</span>
+</code></pre>
+<p>post man 截图：</p>
+<p><img src="/img/es11.png"></p>
+<p>elasticsearch-head查看：</p>
+<p><img src="/img/es12.png"></p>
+<h4 id="创建索引后设置Mapping"><a href="#创建索引后设置Mapping" class="headerlink" title="创建索引后设置Mapping"></a>创建索引后设置Mapping</h4><p>我们可以在创建索引时设置mapping信息，当然也可以先创建索引然后再设置mapping。</p>
+<p>在上一个步骤中不设置maping信息，直接使用put方法创建一个索引，然后设置mapping信息。</p>
+<p>请求的url：<code>POST http://192.168.123.210:9200/blog2/hello/_mapping</code></p>
+<p>请求体：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
+    <span class="token string">"hello"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"id"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+                <span class="token string">"type"</span><span class="token operator">:</span><span class="token string">"long"</span><span class="token punctuation">,</span>
+                <span class="token string">"store"</span><span class="token operator">:</span><span class="token boolean">true</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token string">"title"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+                <span class="token string">"type"</span><span class="token operator">:</span><span class="token string">"text"</span><span class="token punctuation">,</span>
+                <span class="token string">"store"</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+                <span class="token string">"index"</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+                <span class="token string">"analyzer"</span><span class="token operator">:</span><span class="token string">"standard"</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token string">"content"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+                <span class="token string">"type"</span><span class="token operator">:</span><span class="token string">"text"</span><span class="token punctuation">,</span>
+                <span class="token string">"store"</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+                <span class="token string">"index"</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+                <span class="token string">"analyzer"</span><span class="token operator">:</span><span class="token string">"standard"</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><img src="/img/es13.png"></p>
+<p><img src="/img/es14.png"></p>
+<h4 id="删除索引index"><a href="#删除索引index" class="headerlink" title="删除索引index"></a>删除索引index</h4><p>请求url：<code>DELETE 192.168.123.210:9200/blog1</code></p>
+<h4 id="创建文档document"><a href="#创建文档document" class="headerlink" title="创建文档document"></a>创建文档document</h4><p>请求url：<code>POST 192.168.123.210:9200/blog1/article/1</code></p>
+<p>请求体：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
+<span class="token string">"id"</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token string">"title"</span><span class="token operator">:</span><span class="token string">"ElasticSearch是一个基于Lucene的搜索服务器"</span><span class="token punctuation">,</span>
+<span class="token string">"content"</span><span class="token operator">:</span><span class="token string">"它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>post man 截图：</p>
+<p><img src="/img/es15.png"></p>
+<p>elasticsearch-head查看：</p>
+<p><img src="/img/es16.png"></p>
+<h4 id="修改文档document"><a href="#修改文档document" class="headerlink" title="修改文档document"></a>修改文档document</h4><p>请求url：<code>POST 192.168.123.210:9200/blog1/article/1</code></p>
+<p>请求体：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
+<span class="token string">"id"</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token string">"title"</span><span class="token operator">:</span><span class="token string">"【修改】ElasticSearch是一个基于Lucene的搜索服务器"</span><span class="token punctuation">,</span>
+<span class="token string">"content"</span><span class="token operator">:</span><span class="token string">"【修改】它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>elasticsearch-head查看：</p>
+<p><img src="/img/es17.png"></p>
+<h4 id="删除文档document"><a href="#删除文档document" class="headerlink" title="删除文档document"></a>删除文档document</h4><p>请求url：<code>DELETE 192.168.123.210:9200/blog1/article/1</code></p>
+<p><img src="/img/es18.png"></p>
+<h4 id="查询文档-根据id查询"><a href="#查询文档-根据id查询" class="headerlink" title="查询文档-根据id查询"></a>查询文档-根据id查询</h4><p>请求url：<code>GET 192.168.123.210:9200/blog1/article/1</code></p>
+<p><img src="/img/es19.png"></p>
+<h4 id="查询文档-querystring查询"><a href="#查询文档-querystring查询" class="headerlink" title="查询文档-querystring查询"></a>查询文档-querystring查询</h4><p>请求url：<code>POST 192.168.123.210:9200/blog1/article/_search</code></p>
+<p>请求体：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
+    <span class="token string">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"query_string"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"default_field"</span><span class="token operator">:</span> <span class="token string">"title"</span><span class="token punctuation">,</span>
+            <span class="token string">"query"</span><span class="token operator">:</span> <span class="token string">"搜索服务器"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><img src="/img/es20.png"></p>
+<p>💡:将搜索内容”搜索服务器”修改为”钢索”，同样也能搜索到文档。这是因为Standard标准分词器，会把汉字每个字一个词存到索引库中的tilte，也是按照Standard进行的分词，所以会把钢索分成“钢”和“索”。</p>
+<h4 id="查询文档-term查询"><a href="#查询文档-term查询" class="headerlink" title="查询文档-term查询"></a>查询文档-term查询</h4><p>请求url：<code>POST 192.168.123.210:9200/blog1/article/_search</code></p>
+<p>请求体：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
+    <span class="token string">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"term"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"搜索"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><img src="/img/es21.png"></p>
+<p>💡:为什么搜不出来，原因是term不会把搜索分词成“搜”和“索”，而Standard标准分词器每一个字分词了，所以找不到。。</p>
+<pre><code>
+💡：query_string：搜索之前对搜索的关键词分词
 
+💡：term：对搜索的关键词不分词
+</code></pre>
+<h2 id="IK分词器"><a href="#IK分词器" class="headerlink" title="IK分词器"></a>IK分词器</h2><p><strong>概念：</strong></p>
+<p>IKAnalyzer是一个开源的，基于java语言开发的轻量级的中文分词工具包。以开源项目Lucene为应用主体的，结合词典分词和文法分析算法的中文分词组件。</p>
+<p>IK分词器3.0的特性如下：</p>
+<p>1）采用了特有的“正向迭代最细粒度切分算法“，具有60万字/秒的高速处理能力。 </p>
+<p>2）采用了多子处理器分析模式，支持：英文字母（IP地址、Email、URL）、数字（日期，常用中文数量词，罗马数字，科学计数法），中文词汇（姓名、地名处理）等分词处理。</p>
+<p> 3）对中英联合支持不是很好,在这方面的处理比较麻烦.需再做一次查询,同时是支持个人词条的优化的词典存储，更小的内存占用。</p>
+<p> 4）支持用户词典扩展定义。</p>
+<p> 5）针对Lucene全文检索优化的查询分析器IKQueryParser；采用歧义分析算法优化查询关键字的搜索排列组合，能极大的提高Lucene检索的命中率。</p>
+<h3 id="IK分词器安装"><a href="#IK分词器安装" class="headerlink" title="IK分词器安装"></a>IK分词器安装</h3>
       </div>
       <div class="post-tags-categories">
         
         <div class="tags">
           
-            <a href="/tags/%E5%AD%A6%E4%B9%A0/" class="">
-              学习
-            </a>
-          
-            <a href="/tags/es/" class="">
-              es
+            <a href="/tags/ES/" class="">
+              ES
             </a>
           
         </div>
@@ -560,7 +890,7 @@
     </li>
     <li class="post-copyright-link">
     <strong>文章链接:  </strong>
-    <a href="/2022/01/30/blog53/" target="_blank" title="es学习">http://example.com/2022/01/30/blog53/</a>
+    <a href="/2022/01/30/blog53/" target="_blank" title="ElasticSearch（ ES）❤">http://example.com/2022/01/30/blog53/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明:   </strong>
